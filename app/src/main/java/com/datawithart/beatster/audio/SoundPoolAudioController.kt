@@ -10,7 +10,7 @@ import java.io.File
  * Current fallback implementation using SoundPool/MediaRecorder/MediaPlayer/ToneSynth.
  * Keeps the app working while the native Oboe engine is being built.
  */
-class SoundPoolAudioController(private val context: Context) : PadAudioController {
+class SoundPoolAudioController(context: Context) : PadAudioController {
     private val audioEngine = AudioEngine(context)
     private val loopRecorder = LoopRecorder(context)
     private val loopPlayer = LoopPlayer()

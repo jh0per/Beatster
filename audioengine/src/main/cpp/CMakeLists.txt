@@ -15,7 +15,14 @@ find_library(
         log
 )
 
+# Find and link the Oboe library, which provides a wrapper for AAudio/OpenSL ES
+find_package(oboe REQUIRED)
+
 target_link_libraries(
         beatster_audio
+        PUBLIC
         ${log-lib}
+        oboe::oboe
+        aaudio
+        m
 )

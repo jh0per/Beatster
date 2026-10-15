@@ -18,6 +18,12 @@ class NativeAudioController(private val context: Context) : PadAudioController {
         false
     }
 
+    init {
+        if (nativeLoaded) {
+            nativeInit()
+        }
+    }
+
     override suspend fun loadSample(uri: Uri): LoadedSample? {
         val label = uri.lastPathSegment ?: "Sample"
         if (!nativeLoaded) return LoadedSample(0, label)
@@ -85,6 +91,7 @@ class NativeAudioController(private val context: Context) : PadAudioController {
     }
 
     // Native hooks
+    private external fun nativeInit()
     private external fun nativeLoadSample(fd: Int, label: String): Int
     private external fun nativePlaySample(sampleId: Int)
     private external fun nativePlaySampleLoop(sampleId: Int): Boolean

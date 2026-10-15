@@ -3,8 +3,8 @@ package com.datawithart.beatster
 import android.app.Application
 import android.net.Uri
 import com.datawithart.beatster.audio.LoadedSample
+import com.datawithart.beatster.audio.NativeAudioController
 import com.datawithart.beatster.audio.PadAudioController
-import com.datawithart.beatster.audio.SoundPoolAudioController
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -28,8 +28,7 @@ data class PadState(
 )
 
 class PadsViewModel(application: Application) : AndroidViewModel(application) {
-    // TODO: swap to a NativeAudioController when the Oboe-backed engine is ready.
-    private val audioController: PadAudioController = SoundPoolAudioController(application)
+    private val audioController: PadAudioController = NativeAudioController(application)
 
     var isRecordingLoop by mutableStateOf(false)
         private set
