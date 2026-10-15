@@ -1,0 +1,42 @@
+name: Android
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  engine-core:
+    name: Engine core (host, ASan + TSan)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and run with AddressSanitizer
+        run: |
+          cmake -S audioengine/src/test/cpp -B build/asan -DCMAKE_BUILD_TYPE=Debug -DBEATSTER_SANITIZE=address
+          cmake --build build/asan
+          build/asan/engine_tests
+      - name: Build and run with ThreadSanitizer
+        run: |
+          cmake -S audioengine/src/test/cpp -B build/tsan -DCMAKE_BUILD_TYPE=Debug -DBEATSTER_SANITIZE=thread
+          cmake --build build/tsan
+          build/tsan/engine_tests
+
+  app:
+    name: Unit tests and debug APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Unit tests
+        run: ./gradlew :app:testDebugUnitTest --stacktrace
+      - name: Assemble debug APK
+        run: ./gradlew :app:assembleDebug --stacktrace
+      - uses: actions/upload-artifact@v4
+        with:
+          name: beatster-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
