@@ -1,0 +1,3 @@
+[submodule "tools/android-skills"]
+	path = tools/android-skills
+	url = git@github.com:jh0per/AndroidSkills.git
